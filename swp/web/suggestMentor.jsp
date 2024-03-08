@@ -44,33 +44,33 @@
 
         <jsp:include page="header.jsp"></jsp:include>
 
-        <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="row">
-                            <div class="col-lg-12 align-self-center">
-                                <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
-                                    <form action="searchMentor" method="post">
-                                        <div class="input-group mb-3">
-                                            <input name="searchBySkill" type="text" class="form-control" placeholder="Search skill">
-                                            <button class="btn btn-success" type="submit">Go</button>
-                                        </div>
-                                    </form>
-                                    <div class="table-responsive">
-                                        <table class="table table-bordered">
-                                            <thead>
-                                                <tr>
-                                                    <th>Course</th>
-                                                    <th>Mentor</th>
-                                                    <th>Username</th>
-                                                    <th>Rating</th>
-                                                    <th>Requests</th>
-                                                    <th>Invites</th>
-                                                    <th></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+            <div class="main-banner wow fadeIn" id="top" data-wow-duration="1s" data-wow-delay="0.5s">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-12 align-self-center">
+                                    <div class="left-content show-up header-text wow fadeInLeft" data-wow-duration="1s" data-wow-delay="1s">
+                                        <form action="searchMentor" method="post">
+                                            <div class="input-group mb-3">
+                                                <input name="searchBySkill" type="text" class="form-control" placeholder="Search skill">
+                                                <button class="btn btn-success" type="submit">Go</button>
+                                            </div>
+                                        </form>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Course</th>
+                                                        <th>Mentor</th>
+                                                        <th>Username</th>
+                                                        <th>Rating</th>
+                                                        <th>Requests</th>
+                                                        <th>Invites</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
                                                 <c:forEach var="o" items="${listM}" >
                                                     <tr>
                                                         <td><img src="${o.getImgSkill()}" alt="alt" style="width: 8rem"></td>
@@ -79,7 +79,7 @@
                                                         <td>${o.getRate()} <i class="fa-solid fa-star" style="color: #FFD43B;"></i></td>
                                                         <td>${o.getTotalRequest()}</td>
                                                         <td>${o.getInvite()}</td>
-                                                        <td><button><a href="Request?action=create&idMentor=${o.getIdMentor()}">Invite</a></button></td>
+                                                        <td><button><a href="Request?action=create&idMentor=${o.getIdMentor()}&idSkill=${o.getIdSkill()}">Invite</a></button></td>
                                                     </tr>
                                                 </c:forEach>
                                             </tbody>
@@ -94,7 +94,7 @@
             </div>
         </div>
 
-        
+
         <footer id="newsletter">
             <div class="container">
                 <div class="row">
@@ -185,15 +185,15 @@
 
         <!-- Scripts -->
         <script src="vendor/jquery/jquery.min.js"></script>
-            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-            <script src="assets/js/owl-carousel.js"></script>
-            <script src="assets/js/animation.js"></script>
-            <script src="assets/js/imagesloaded.js"></script>
-            <script src="assets/js/popup.js"></script>
-            <script src="assets/js/custom.js"></script>
-            <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> 
-            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/owl-carousel.js"></script>
+        <script src="assets/js/animation.js"></script>
+        <script src="assets/js/imagesloaded.js"></script>
+        <script src="assets/js/popup.js"></script>
+        <script src="assets/js/custom.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> 
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </body>
 </html>

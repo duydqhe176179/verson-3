@@ -27,7 +27,7 @@
                 border-radius: 5px;
                 padding: 25px 25px 30px;
                 box-shadow: 8px 8px 10px rgba(0,0,0,0.06);
-                margin-top: 10px;
+                margin-top: 40px;
                 margin-left: 36%;
             }
             .wrapper h2{
@@ -66,35 +66,7 @@
                 border: none;
                 cursor: pointer;
             }
-            .pagination {
-                margin-bottom: 2px;
-            }
-
-            .pagination a {
-                display: inline-block;
-                padding: 8px 16px;
-                text-decoration: none;
-                color: #000;
-                background-color: #fff;
-                border: 1px solid #ddd;
-                margin: 0 4px;
-            }
-
-            .pagination a.active {
-                background-color: #007bff;
-                color: #fff;
-                border: 1px solid #007bff;
-            }
-            .flex-container {
-                display: flex;
-                flex-direction: row; /* Sắp xếp theo hàng ngang */
-                flex-wrap: wrap; /* Cho phép các phần tử lớn hơn kích thước của flex container ngắt dòng xuống dòng mới */
-            }
-
-            .flex-item {
-                margin-right: 20px; /* Khoảng cách bên phải giữa các phần tử */
-                margin-bottom: 10px; /* Khoảng cách dưới giữa các phần tử */
-            }
+            
         </style>
     </head>
     <link href="vendor/bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet">
@@ -112,7 +84,6 @@
     <link rel="stylesheet" href="assets/css/templatemo-chain-app-dev.css">
     <link rel="stylesheet" href="assets/css/animated.css">
     <link rel="stylesheet" href="assets/css/owl.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://kit.fontawesome.com/4c292f6960.js" crossorigin="anonymous"></script>
 
 
@@ -122,104 +93,48 @@
         <body>
             <section>
 
-                <h1 style="text-align: center; color: white;">View </h1>
+                <h1 style="text-align: center;">View List Requests</h1>
 
                 <h1 style="color: Red; text-align: center;">${errorMessage}</h1>
             <h1 style="color: Red; text-align: center;">${error}</h1>
-            <div style="margin: 100px">
-
-                <div style="margin-bottom: 5px;">
-                    <form action="reqmentor" method="post">
-                        <div class="flex-container">
-                            <c:forEach items="${ls}" var="checkbox">
-                                <div class="flex-item">
-                                    <input type="checkbox" id="${checkbox}" name="checkbox" value="${checkbox}">
-                                    <label for="${checkbox}">${checkbox}</label><br>
-                                </div>
-                            </c:forEach>
-                            <c:forEach items="${choice}" var="checkboxId">
-                                <script>
-                                    var checkbox = document.getElementById("${checkboxId}");
-                                    if (checkbox) {
-                                        checkbox.checked = true;
-                                    }
-                                </script>
-                            </c:forEach>
-                        </div>
-
-
-                        <button type="submit" style="background: #b3b3b3; border: 1px; border-radius: 2px; width: 80px; height: 40px;">
-                            <i style="width: 10px;"class="fas fa-search"></i>
-                        </button>
-                    </form>
-                </div>
-
-                <div style="margin-bottom: 5px;" class="pagination">
-                    <c:if test="${totalPages > 1}">
-                        <c:forEach var="i" begin="1" end="${totalPages}">
-                            <c:url value="reqmentor" var="paginationUrl">
-                                <c:param name="page" value="${i}" />
-                            </c:url>
-                            <a href="${paginationUrl}" class="${i == currentPage ? 'active' : ''}">${i}</a>
-                        </c:forEach>
-                    </c:if>
-                </div>
-
-
-                <table border="1" style="margin:auto">
-                    <thead style="border: 1px solid black; background:#48CEFA;" >
-                        <tr>
-                            <th style="width: 10%;text-align: center;">Full Name</th>
-                            <th style="width: 10%;text-align: center;">Title</th>
-                            <th style="width: 15%;text-align: center;">Content of request</th>
-                            <th style="width: 10%;text-align: center;">Start Date</th>
-                            <th style="width: 10%;text-align: center;">Deadline Date</th>
-                            <th style="width: 10%;text-align: center;">Deadline Hour (h)</th>
-                            <th style="width: 10%;text-align: center;">Skills</th>
-                            <th style="width: 10%;text-align: center;">Status</th>
-                            <th style="width: 15%;text-align: center;">Actions</th>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Full Name</th>
+                        <th>Title</th>
+                        <th>Content of request</th>
+                        <th>Start Date</th>
+                        <th>Deadline Date</th>
+                        <th style="width:40px;">Deadline Hour (h)</th>
+                        <th>Skills</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody style="text-align: center;">
+                    <c:forEach var="a" items="${listR}">
+                        <tr style="height: 10%;">
+                            <td><a style="text-decoration: none;" href="infomentee?id=${a.idMentee}">${a.fullname}</a></td>
+                            <td>${a.title}</td>
+                            <td>${a.content}</td>
+                            <td>${a.startDate}</td>
+                            <td>${a.deadline}</td>
+                            <td>${a.hour}</td>
+                            <td>${a.skill}</td>
+                            <td>${a.status}</td>
+                            <td class="btn-container">
+                                <button onclick="showRejectForm(${a.idRequest});" style="background-color: #DE3E44; border-radius: 5px; border: none; height: 30px; width: 60px; margin-left: 5px;">
+                                    <a style="text-decoration: none; color: white;" href="">Reject</a>
+                                </button>
+                                <button onclick="confirmAccept(${a.idRequest});" style="background-color: #1BA345; border-radius: 5px; border: none; height: 30px; width: 60px">
+                                    <a style="text-decoration: none; color: white;" href="">Accept</a>
+                                </button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="a" items="${listR}">
-                            <tr style="height: 20%;border: 1px solid black;">
-                                <td style="text-align: center;"><a style="text-decoration: none;" href="infomentee?id=${a.idMentee}">${a.fullname}</a></td>
-                                <td style="text-align: center;">${a.title}</td>
-                                <td style="text-align: center;">${a.content}</td>
-                                <td style="text-align: center;">${a.startDate}</td>
-                                <td style="text-align: center;">${a.deadline}</td>
-                                <td style="text-align: center;">${a.hour}</td>
-                                <td style="text-align: center;">${a.skill}</td>
-                                <td style="text-align: center;">${a.status}</td>
-                                <td class="btn-container" style="text-align: center;">
-                                    <c:choose>
-                                        <c:when test="${a.status eq 'Open'}">
 
-                                            <a href="accept?idRequest=${a.idRequest}" onclick="return confirmAccept(event);" style="background-color: #1BA345; border-radius: 5px; height: 30px; width: 70px; display: inline-block; text-align: center; line-height: 30px; color: white; text-decoration: none;cursor: pointer">
-                                                Accept
-                                            </a>
-                                            <a onclick="showRejectForm(${a.idRequest});" style="background-color: #DE3E44; border-radius: 5px; height: 30px; width: 70px; margin-left: 5px; display: inline-block; text-align: center; line-height: 30px; color: white; text-decoration: none;cursor: pointer">
-                                                Reject
-                                            </a>
-                                        </c:when>
-                                        <c:when test="${a.status eq 'Learning'}">
-                                            <a href="endProcess?idRequest=${a.idRequest}" onclick="confirmEnd(${a.idRequest});" style="background-color:  #1BA345; border-radius: 5px; height: 30px; width: 70px; display: inline-block; text-align: center; line-height: 30px; color: white; text-decoration: none;">
-                                                Finish
-                                            </a>
-                                        </c:when>
-                                        <c:when test="${a.status eq 'Completed'}">
-                                            Wait for Paid
-                                        </c:when>
-                                    </c:choose>
-
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-
-            </div>
-
+                    </c:forEach>
+                </tbody>
+            </table>
             <form id="rejectForm" method="post" action="reasonreject">
                 <input type="text" id="idRequest" name="idRequest" style="display: none"> <!-- Input hidden để lưu idRequest -->
                 <div class="wrapper" style="display:none;">
@@ -320,30 +235,50 @@
             </div>
         </footer>
         <script>
-            function confirmAccept(event) {
-                if (!confirm('Are you sure you want to accept this request?')) {
-                    event.preventDefault(); // Prevent the default behavior of the <a> element
-                    return false;
-                }
-                return true;
-            }
-            function confirmEnd(event) {
-                if (!confirm('Are you sure you want to end this request?')) {
-                    event.preventDefault(); // Prevent the default behavior of the <a> element
-                    return false;
-                }
-                return true;
+            function showRejectForm(idRequest) {
+                console.log("Show Reject Form function called with idRequest:", idRequest);
+                // Set idRequest value
+                document.getElementById('idRequest').value = idRequest;
+                // Show reject popup form
+                document.querySelector('.wrapper').style.display = 'block';
+
+                // Set onclick event for the confirmReject button
+                document.querySelector('.button button[type="submit"]').setAttribute('onclick', 'confirmReject(' + idRequest + ')');
             }
             function cancelRejectForm() {
+                // Hide reject popup form
                 document.querySelector('.wrapper').style.display = 'none';
             }
 
-            function showRejectForm(idRequest) {
-                document.getElementById('idRequest').value = idRequest;
-                document.querySelector('.wrapper').style.display = 'block';
+            // Function to submit the reject form
+            document.getElementById('rejectForm').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent form submission
+                // Perform actions you need here, for example, submit the form via AJAX
+                // Then, hide the form
+                document.querySelector('.wrapper').style.display = 'none';
+            });
+
+            function confirmAccept(idRequest) {
+                if (confirm('Are you sure you want to accept this request?')) {
+                    // If user clicks OK, redirect to the accept servlet
+                    window.location.href = 'accept?idRequest=' + idRequest + '&action=accept';
+                }
             }
 
-
+            function confirmReject(idRequest) {
+                if (confirm('Are you sure you want to reject this request?')) {
+                    var reasonReject = document.getElementById('auto-resize-textarea').value;
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", "reasonreject?idRequest=" + idRequest + "&reasonReject=" + reasonReject, true);
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 4 && xhr.status == 200) {
+                            // Xử lý phản hồi từ server (nếu cần)
+                            document.querySelector('.wrapper').style.display = 'none';
+                        }
+                    };
+                    xhr.send();
+                }
+            }
 
             const textarea = document.getElementById("auto-resize-textarea");
             textarea.addEventListener("input", function () {

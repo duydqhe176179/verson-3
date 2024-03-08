@@ -70,6 +70,10 @@
                 color: #fff;
                 border: none;
             }
+             .rate-link {
+                text-decoration: none;
+                font-size: 20px;
+            }
         </style>
     </head>
     <body>
@@ -106,14 +110,25 @@
                             <td>${request.deadline}</td>
                             <td>${request.hour}</td>
                             <td>${request.status}</td>
-                            <td class="btn-container">
-                                <button class="update-btn" > <a href="updatereq?idrequest=${request.idRequest} ">Update</a></button>
+                            <c:if test="${request.status eq 'Open'}">
+                                <td class="btn-container">
+                                    <button class="rate" > <a href="updatereq?idrequest=${request.idRequest} " class="rate-link">Update</a></button>
+                                </td>
+                            </c:if>         
+                            <c:if test="${request.status == 'Accepted'}">
+                                <td>
+                        <button class="rate"> <a class="rate-link" href="payment?idrequest=${request.idRequest}">Payment</a></button>   
+                        </td>
+                    </c:if>
+                    <c:if test="${request.status eq 'Completed'}">
+                        <td>
+                            <button class="rate" onclick="hideRateButton(this)"><a href="rate?idrequest=${request.idRequest}&idMentor=${request.idMentor}&idMentee=${request.idMentee}" class="rate-link">Rate</a></button>
+                        </td>
+                    </c:if>
+                    </tr>
+                </c:forEach>
 
-                            </td>
-                        </tr>
-                    </c:forEach>
-
-                    <!-- Add more rows as needed -->
+                <!-- Add more rows as needed -->
                 </tbody>
             </table>
         </section>

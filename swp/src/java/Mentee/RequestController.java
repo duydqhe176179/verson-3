@@ -4,6 +4,7 @@
  */
 package Mentee;
 
+import admin.AdminDAO;
 import dal.MenteeDAO;
 import dal.MentorDAO;
 import dal.RequestDAO;
@@ -22,6 +23,8 @@ import java.util.List;
 import model.Account;
 import model.Mentor;
 import model.Request;
+import model.Skill;
+import model.SkillMentor;
 
 /**
  *
@@ -39,14 +42,18 @@ public class RequestController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+        System.out.println("action" + action);
         int idMentor = Integer.parseInt(request.getParameter("idMentor"));
+        System.out.println("idmentor" + idMentor);
+        int idSkill = Integer.parseInt(request.getParameter("idSkill"));
+        System.out.println("idskill" + idSkill);
         System.out.println(idMentor);
         switch (action) {
             case "list":
                 listRequests(request, response);
                 break;
             case "create":
-                showRequestForm(idMentor, request, response);
+                showRequestForm(idMentor, idSkill, request, response);
                 break;
             case "edit":
                 showEditForm(request, response);
@@ -59,7 +66,7 @@ public class RequestController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-
+        System.out.println("action post " + action);
         if (action == null) {
             action = "list";
         }
@@ -83,7 +90,7 @@ public class RequestController extends HttpServlet {
         request.getRequestDispatcher("request-list.jsp").forward(request, response);
     }
 
-    private void showRequestForm(int idMentor, HttpServletRequest request, HttpServletResponse response)
+    private void showRequestForm(int idMentor, int idSkill, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Account account = (Account) request.getSession().getAttribute("account");
@@ -91,10 +98,15 @@ public class RequestController extends HttpServlet {
             response.sendRedirect("signin");
             return;
         }
-        
+
         MentorDAO dao = new MentorDAO();
-        Mentor m=dao.getIDMentor(idMentor);
+        AdminDAO adminDao = new AdminDAO();
+
+        Mentor m = dao.getIDMentor(idMentor);
+        SkillMentor skill = adminDao.getSkillById(idSkill);
+
         request.setAttribute("mentor", m);
+        request.setAttribute("skillMentor", skill);
 
         request.getRequestDispatcher("view/create-request.jsp").forward(request, response);
     }
@@ -113,13 +125,15 @@ public class RequestController extends HttpServlet {
         try {
             // Retrieve form data
             int idMentor = Integer.parseInt(request.getParameter("idMentor"));
-            System.out.println(idMentor);
             String title = request.getParameter("title");
             String deadlineDateStr = request.getParameter("deadlineDate");
             String deadlineHourStr = request.getParameter("deadlineHour");
             String content = request.getParameter("content");
-            String[] skills = request.getParameterValues("skills");
-
+            int idSkill = Integer.parseInt(request.getParameter("idSkill"));
+            AdminDAO adminDao = new AdminDAO();
+            SkillMentor skill = adminDao.getSkillById(idSkill);
+            String nameSkill = skill.getSkillName();
+            int totalCost = Integer.parseInt(request.getParameter("totalCost"));
             // Assuming you have a method to get the current Mentee ID
             Account account = (Account) request.getSession().getAttribute("account");
             int idMentee = new MenteeDAO().getMenteeByAccountId(account.getId()).getIdMentee();
@@ -130,14 +144,13 @@ public class RequestController extends HttpServlet {
             BigDecimal deadlineHour = new BigDecimal(deadlineHourStr);
 
             // Create a new Request object
-            Request newRequest = new Request(0, idMentee, idMentor, title, content, String.join(", ", skills), "Open", deadlineDateStr, deadlineHour);
-            System.out.println(newRequest.toString());
+            Request newRequest = new Request(0, idMentee, idMentor, title, content, nameSkill, "Open", deadlineDateStr, deadlineHour,totalCost);
 
             // Save the new request to the database
             RequestDAO requestDAO1 = new RequestDAO();
             requestDAO1.createRequest(newRequest);
             String msg = "success";
-            request.setAttribute("msg", "success");
+            request.setAttribute("msg", msg);
             request.getRequestDispatcher("view/create-request.jsp").forward(request, response);
 //        if (result) {
 //            // Redirect to a success page

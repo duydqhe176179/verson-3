@@ -57,15 +57,15 @@ public class AcceptRequest extends HttpServlet {
      @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+     
         DAO dao = new DAO();
-        String action = request.getParameter("action");
-
-        if ("accept".equals(action)) {
+        
+        
             // Update the status in the database to "Accept"
             String idRequest = request.getParameter("idRequest"); // Get the ID from the request
 
             // Assuming updateRe returns a boolean indicating success
-            boolean updateSuccess = dao.updateRe(Integer.parseInt(idRequest), "Processing");
+            boolean updateSuccess = dao.updateRe(Integer.parseInt(idRequest), "Accepted");
 
             if (updateSuccess) {
                 // Redirect to success page or yourOriginalPage.jsp
@@ -78,7 +78,7 @@ public class AcceptRequest extends HttpServlet {
                 return; // Return to avoid further processing
             }
         }
-    }
+    
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

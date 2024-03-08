@@ -93,7 +93,7 @@
                         <span class="fas fa-at"></span>
                         <span class="link">Contact</span>
                     </a>
-                    <a href="createcv">
+                    <a href="createcv?idMentor=${cx.getId()}">
                         <span class="fa-solid fa-pen-nib"></span>
                         <span class="link">Update</span>
                     </a>

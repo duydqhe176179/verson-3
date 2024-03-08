@@ -43,8 +43,9 @@ public class ViewStatisticRequestDAO extends DBContext {
                 String status = rs.getString("status");
                 String deadlineDate = rs.getString("deadlineDate");
                 BigDecimal deadlineHour = rs.getBigDecimal("deadlineHour");
+                int totalCost=rs.getInt("totalCost");
 
-                listRequest.add(new Request(idRequest, idMentee, idMentor, title, content, skill, status, deadlineDate, deadlineHour));
+                listRequest.add(new Request(idRequest, idMentee, idMentor, title, content, skill, status, deadlineDate, deadlineHour, totalCost));
             }
         } catch (Exception e) {
             System.out.println(e);

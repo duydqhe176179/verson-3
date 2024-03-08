@@ -21,8 +21,17 @@ public class Request {
     private String reasonReject;
     private String deadlineDate;
     private BigDecimal deadlineHour;
+    int totalCost;
 
     public Request() {
+    }
+
+    public int getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(int totalCost) {
+        this.totalCost = totalCost;
     }
 
     public String getStartDate() {
@@ -92,7 +101,7 @@ public class Request {
         this.hour = hour;
     }
 
-    public Request(int idRequest, int idMentee, int idMentor, String title, String content, String skill, String status, String deadlineDate, BigDecimal deadlineHour) {
+    public Request(int idRequest, int idMentee, int idMentor, String title, String content, String skill, String status, String deadlineDate, BigDecimal deadlineHour,int totalCost) {
         this.idRequest = idRequest;
         this.idMentee = idMentee;
         this.idMentor = idMentor;
@@ -102,6 +111,7 @@ public class Request {
         this.status = status;
         this.deadlineDate = deadlineDate;
         this.deadlineHour = deadlineHour;
+        this.totalCost=totalCost;
     }
 
     public Request(int idMentee, int idMentor, String title, String content, String skill, String status, String deadline, float hour) {
@@ -204,7 +214,5 @@ public class Request {
     public String toString() {
         return "Request{" + "idRequest=" + idRequest + ", idMentee=" + idMentee + ", idMentor=" + idMentor + ", title=" + title + ", content=" + content + ", skill=" + skill + ", status=" + status + ", startDate=" + startDate + ", deadline=" + deadline + ", hour=" + hour + ", deadlineDate=" + deadlineDate + ", deadlineHour=" + deadlineHour + '}';
     }
-
-    
 
 }

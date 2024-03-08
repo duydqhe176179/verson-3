@@ -59,6 +59,82 @@ public class DAO extends DBContext {
         return null;
     }
 
+    public Rate getRateByIDRequest(int id) {
+        try {
+            String sql = " select * from rate\n"
+                    + "  where idRequest=?";
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, id);
+            rs = stm.executeQuery();
+            if (rs.next()) {
+                int idRate = rs.getInt(1);
+                int idRequest = rs.getInt(2);
+                int idMentee = rs.getInt(3);
+                int idMentor = rs.getInt(4);
+                int star = rs.getInt(5);
+                String comment = rs.getString(6);
+                String time = rs.getString(7);
+
+                Rate r = new Rate(idRate, idRequest, idMentee, idMentor, star, comment, time);
+
+                return r;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    public Request getIdMentorss(int idMentor) {
+        try {
+            String sql = "select * from request\n"
+                    + "         where idMentor = ?";
+            stm = connection.prepareStatement(sql);
+            stm.setInt(1, idMentor);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                Request objE = new Request(
+                        rs.getInt(1), rs.getInt(2), rs.getInt(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6),
+                        rs.getString(7), rs.getString(8),
+                        rs.getString(9), rs.getFloat(10)
+                );
+                if (!objE.getStatus().equals("Cancel") && !objE.getStatus().equals("Close") && !objE.getStatus().equals("Processing")) {
+
+                }
+                return objE;
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public boolean updateratebyidreq(int id, int star, String comment, String time) {
+        try {
+            String strUPDATE = "UPDATE [dbo].[rate]\n"
+                    + "   SET    \n"
+                    + "       [star] = ?\n"
+                    + "      ,[comment] = ?\n"
+                    + "      ,[time] = ?\n"
+                    + " WHERE idRequest = ?";
+            stm = connection.prepareStatement(strUPDATE);
+            stm.setInt(1, star);
+            stm.setString(2, comment);
+            stm.setString(3, time);
+            stm.setInt(4, id);
+
+            int rowsAffected = stm.executeUpdate();
+            stm.close();
+
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace(); // Handle the exception appropriately, log or throw a custom exception
+            return false;
+        }
+    }
+
     public boolean changePassword(String username, String newPassword) {
         String query = "UPDATE account SET password = ? WHERE username = ? ";
 
@@ -359,6 +435,7 @@ public class DAO extends DBContext {
         }
         return listnews;
     }
+
     public List<Request> getAllRequestsByID(int idMentor) {
         List<Request> list = new ArrayList<>();  // Khởi tạo một danh sách mới
 
@@ -401,8 +478,8 @@ public class DAO extends DBContext {
         return list;
     }
 //
-    
-   public Mentee MenteeinfoById(int id) {
+
+    public Mentee MenteeinfoById(int id) {
         try {
             String sql = "SELECT a.idAccount, m.fullname, m.avatar, m.dob, m.phone, m.sex, m.address,a.email \n"
                     + "                    FROM mentee m \n"
@@ -428,10 +505,8 @@ public class DAO extends DBContext {
         }
         return null;
     }
- 
-    
-    
- //   
+
+    //   
     List<Mentor> listm = new ArrayList<>();
 
     public List<Mentor> getAllMentor() {

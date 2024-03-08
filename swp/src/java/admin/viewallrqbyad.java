@@ -51,11 +51,11 @@ public class viewallrqbyad extends HttpServlet {
         }
     }
 
-    private boolean isAdmin(HttpServletRequest request) {
+   private boolean isAdmin(HttpServletRequest request) {
         HttpSession session = request.getSession();
         Account account = (Account) session.getAttribute("account");
 
-        return account != null && "Admin".equals(account.getRole());
+        return account != null && account.getRole().equals("Admin");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -69,10 +69,10 @@ public class viewallrqbyad extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if (!isAdmin(request)) {
-            response.sendRedirect("home.jsp");
-            return;
-        }
+//        if (!isAdmin(request)) {
+//            response.sendRedirect("home.jsp");
+//            return;
+//        }
 
         int page = 1; // Số trang mặc định
         int recordsPerPage = 6; // Số bản ghi hiển thị trên mỗi trang

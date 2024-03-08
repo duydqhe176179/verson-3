@@ -114,7 +114,7 @@
                     </div> 
                     <div class="input-pro">
                         <label> Date of birth: </label>
-                        <input type="date"  name="birth" placeholder="Date of birth" value="${mentee.dob}" required>   
+                        <input id="dateInput" type="date"  name="birth" placeholder="Date of birth" value="${mentee.dob}" required>   
                     </div> 
 
                     <label style="font-size: large">Gender:</label>
@@ -142,6 +142,21 @@
 
     </form>
 </div>
+<script>
 
+    function setMaxDate() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+
+        document.getElementById('dateInput').max = today;
+    }
+
+
+    setMaxDate();
+</script>
 </body>
 </html>

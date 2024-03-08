@@ -12,30 +12,40 @@ import java.util.Date;
  */
 public class Rate {
 
-    int idRate, idMentee, idMentor, star;
+    int idRate, idRequest, idMentee, idMentor, star;
     String comment;
     String time;
 
     public Rate() {
     }
 
-    public Rate(int idMentee, int idMentor, int star, String comment, String time) {
-        this.idMentee = idMentee;
-        this.idMentor = idMentor;
-        this.star = star;
-        this.comment = comment;
-        this.time = time;
-    }
-     
-    
-    public Rate(int idRate, int idMentee, int idMentor, int star, String comment, String time) {
+    public Rate(int idRate, int idRequest, int idMentee, int idMentor, int star, String comment, String time) {
         this.idRate = idRate;
+        this.idRequest = idRequest;
         this.idMentee = idMentee;
         this.idMentor = idMentor;
         this.star = star;
         this.comment = comment;
         this.time = time;
     }
+
+    public Rate(int idRequest, int idMentee, int idMentor, int star, String comment, String time) {
+        this.idRequest = idRequest;
+        this.idMentee = idMentee;
+        this.idMentor = idMentor;
+        this.star = star;
+        this.comment = comment;
+        this.time = time;
+    }
+
+    public int getIdRequest() {
+        return idRequest;
+    }
+
+    public void setIdRequest(int idRequest) {
+        this.idRequest = idRequest;
+    }
+
 
     public int getIdRate() {
         return idRate;
@@ -90,9 +100,4 @@ public class Rate {
         return "Rate{" + "idRate=" + idRate + ", idMentee=" + idMentee + ", idMentor=" + idMentor + ", star=" + star + ", comment=" + comment + ", time=" + time + '}';
     }
 
-   
-    }
-
-   
-
-
+}

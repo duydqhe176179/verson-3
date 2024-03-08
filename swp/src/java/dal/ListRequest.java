@@ -40,7 +40,87 @@ public class ListRequest extends DBContext {
         return listRequest;
 
     }
+    
 
+    public List<String> getAllDistinctStatus() {
+    Connection conn = null;
+    PreparedStatement stm = null;
+    ResultSet rs = null;
+    List<String> distinctStatuses = new ArrayList<>();
+
+    String query = "SELECT DISTINCT status FROM request"; // Modified SQL query
+
+    try {
+        conn = new DBContext().connection;
+        stm = conn.prepareStatement(query);
+        rs = stm.executeQuery();
+
+        while (rs.next()) {
+            distinctStatuses.add(rs.getString("status"));
+        }
+    } catch (Exception e) {
+        System.out.println(e);
+    } finally {
+        // Close resources
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    return distinctStatuses;
+}
+
+    public List<Request> getRequestsByFilter(String sql) {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        List<Request> listRequest = new ArrayList<>();
+
+          try {
+            stm = connection.prepareStatement(sql);
+          
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Request objE = new Request(
+                        rs.getInt(1), rs.getInt(2), rs.getInt(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6),
+                        rs.getString(7), rs.getString(8), rs.getString(9),
+                        rs.getString(10), rs.getFloat(11)
+                );
+                listRequest.add(objE);
+
+            }
+        } catch (SQLException e) {
+            System.out.println("Error when selecting");
+            // Xử lý ngoại lệ một cách đúng đắn, ghi log hoặc ném lại nếu cần thiết
+        } finally {
+            // Đảm bảo đóng các tài nguyên, ví dụ: PreparedStatement, ResultSet
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error when closing resources");
+            }
+        }
+        
+
+        return listRequest;
+    }
     public int getIdAccountByUsername(String username) {
         Connection conn = null;
         int idAccount = -1;

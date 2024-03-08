@@ -30,12 +30,13 @@ public class MenteeDAO extends DBContext {
     ResultSet rs;
     List<Mentee> mentee = new ArrayList<>();
     List<StaticMentee> list = new ArrayList<>();
-    public Mentee getMenteeByAccountId(int idAccount) {
-        String query = "SELECT m.* FROM mentee m " +
-                       "JOIN account a ON m.idMentee = a.idAccount " +
-                       "WHERE a.idAccount = ?";
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+    public Mentee getMenteeByAccountId(int idAccount) {
+        String query = "SELECT m.* FROM mentee m "
+                + "JOIN account a ON m.idMentee = a.idAccount "
+                + "WHERE a.idAccount = ?";
+
+        try ( PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setInt(1, idAccount);
 
             ResultSet resultSet = pstmt.executeQuery();
@@ -46,6 +47,14 @@ public class MenteeDAO extends DBContext {
             System.out.println("Error retrieving mentee by accountId: " + e.getMessage());
         }
         return null;
+    }
+
+    public List<StaticMentee> getListByPage(List<StaticMentee> list, int start, int end) {
+        ArrayList<StaticMentee> arr = new ArrayList<>();
+        for (int i = start; i < end; i++) {
+            arr.add(list.get(i));
+        }
+        return arr;
     }
 
     private Mentee mapResultSetToMentee(ResultSet resultSet) throws Exception {
@@ -62,6 +71,7 @@ public class MenteeDAO extends DBContext {
                 resultSet.getString("address")
         );
     }
+
     public boolean updateAvatar(int idMentee, String avatar) {
         try {
             String strUPDATE = "UPDATE [dbo].[mentee]\n"
@@ -112,8 +122,8 @@ public class MenteeDAO extends DBContext {
                 String UserName = rs.getString(2);
                 int NumRequests = rs.getInt(3);
                 float TotalHours = rs.getFloat(4);
-                int totalskill  =rs.getInt(5);
-                StaticMentee a = new StaticMentee(FullName, UserName, NumRequests, TotalHours,totalskill);
+                int totalskill = rs.getInt(5);
+                StaticMentee a = new StaticMentee(FullName, UserName, NumRequests, TotalHours, totalskill);
                 list.add(a);
             }
         } catch (SQLException e) {
@@ -203,8 +213,6 @@ public class MenteeDAO extends DBContext {
         }
         return null;
     }
-    
-    
 
     public static void main(String[] args) {
         MenteeDAO cv = new MenteeDAO();

@@ -9,6 +9,21 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
         <link rel="stylesheet" href="css/style_rate.css"/>
         <title>Rate&Comment</title>
+        <style>
+            .btn.cancel {
+                background-color: #ff0000; /* Red background color */
+                color: #ffffff; /* White text color */
+                border: none; /* No border */
+                padding: 10px 20px; /* Padding around the text */
+                text-decoration: none; /* Remove underline from link */
+                cursor: pointer; /* Change cursor to pointer on hover */
+            }
+
+            .btn.cancel:hover {
+                background-color: #cc0000; /* Darker red background color on hover */
+            }
+
+        </style>
     </head>
     <body>
         <div class="wrapper">
@@ -19,29 +34,22 @@
             <p style="text-align: center; color: red;"> ${errorM}</p> 
             <p style="text-align: center; color: red;"> ${errorMess}</p> 
             <h3>Rating form</h3>
-            <form action="rate" method="post">
-                <div class="rating">
-                    <select style="margin-left: -127px;" name="mentorId">
-                        <option disabled selected>Select Mentor</option> 
-                        <c:forEach var="m" items="${mentors}">
-                            <option value="${m.idMentor}">${m.fullname}</option>
-                        </c:forEach>
-                    </select>
-
-                    <!-- Change the type of the hidden input field to text -->
-                    <input type="number" name="rating" hidden>
-                    <i class='bx bx-star star' style="--i: 0;"></i>
+            <form action="rate?idrequest=${idreq}&idMentor=${req.idMentor}&idMentee=${idreqd}" method="post">
+                <div class="rating">                  
+                    <input type="number" name="rating" hidden value="${rate.star}">
                     <i class='bx bx-star star' style="--i: 1;"></i>
                     <i class='bx bx-star star' style="--i: 2;"></i>
                     <i class='bx bx-star star' style="--i: 3;"></i>
                     <i class='bx bx-star star' style="--i: 4;"></i>
+                    <i class='bx bx-star star' style="--i: 5;"></i>
                 </div>
-                <textarea name="opinion" cols="30" rows="5" placeholder="Your opinion..."></textarea>
+                <textarea name="opinion" cols="30" rows="5">${rate.comment}</textarea>
                 <div class="btn-group">
                     <button type="submit" class="btn submit">Submit</button>
-                    <button class="btn cancel">Cancel</button>
+                    <button class="btn cancel"><a href="listrequest">Cancel</a></button>
                 </div>
             </form>
+
         </div>
 
         <script>

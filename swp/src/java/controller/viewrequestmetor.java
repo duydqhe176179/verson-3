@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Arrays;
 import java.util.List;
 import model.Account;
 import model.Request;
@@ -66,17 +67,50 @@ public class viewrequestmetor extends HttpServlet {
 
         if (account != null && "Mentor".equals(account.getRole())) {
             int mentorId = account.getId(); // Assuming getId() returns the mentor's ID
-            DAO dao = new DAO();
-            List<Request> list = dao.getAllRequestsByID(mentorId);
 
-            if (!list.isEmpty()) {
-                request.setAttribute("listR", list);
-                request.getRequestDispatcher("viewrequest.jsp").forward(request, response);
+            DAO dao = new DAO();
+            dal.ListRequest lr = new dal.ListRequest();
+            List<Request> list = null;
+            if (request.getAttribute("list") == null) {
+                list = dao.getAllRequestsByID(mentorId);
+            } else {
+                list = (List<Request>) request.getAttribute("list");
+                String[] selectedValues = (String[]) request.getAttribute("list_choice");
+                List<String> choice = Arrays.asList(selectedValues);
+                request.setAttribute("choice", choice);
+            }
+            List<String> status = lr.getAllDistinctStatus();
+
+            int page = 1; // Default page number
+            int recordsPerPage = 5; // Number of records to display per page
+
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+
+            // Calculate total number of records and pages
+            int totalRecords = list.size();
+            int totalPages = (totalRecords + recordsPerPage - 1) / recordsPerPage;
+
+            // Calculate start and end index for current page
+            int startIdx = (page - 1) * recordsPerPage;
+            int endIdx = Math.min(startIdx + recordsPerPage, totalRecords);
+
+            // Extract current list to display on the page
+            List<Request> currentList = list.subList(startIdx, endIdx);
+
+            if (!currentList.isEmpty()) {
+                request.setAttribute("listR", currentList);
             } else {
                 String errorMessage = "No requests found for this mentor.";
                 request.setAttribute("errorMessage", errorMessage);
-                request.getRequestDispatcher("viewrequest.jsp").forward(request, response);
             }
+
+            // Pass pagination-related variables to the JSP
+            request.setAttribute("ls", status);
+            request.setAttribute("page", page);
+            request.setAttribute("totalPages", totalPages);
+            request.getRequestDispatcher("viewrequest.jsp").forward(request, response);
         } else {
             String errorMessage = "You do not have permission to access this page.";
             request.setAttribute("errorMessage", errorMessage);
@@ -96,7 +130,29 @@ public class viewrequestmetor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String[] selectedValues = request.getParameterValues("checkbox");
+        dal.ListRequest lr = new dal.ListRequest();
+        Account account = (Account) request.getSession().getAttribute("account");
+        if (selectedValues != null && selectedValues.length > 0) {
+            String sql = "SELECT r.idRequest, r.idMentee, r.idMentor, m.fullname AS FullName, r.title, r.content, r.skill, r.status, r.startDate, r.deadline, r.hour\n"
+                    + "FROM request r\n"
+                    + "JOIN mentee m ON r.idMentee = m.idMentee WHERE";
+            for (int i = 0; i < selectedValues.length; i++) {
+                if (i > 0) {
+                    sql += " OR";
+                }
+                sql += " r.status = '" + selectedValues[i] + "'";
+
+            }
+            sql = sql + " and r.idMentor = " + account.getId();
+            System.out.println(sql);
+            List<Request> data = lr.getRequestsByFilter(sql);
+            request.setAttribute("list", data);
+            System.out.println(sql);
+            request.setAttribute("list_choice", selectedValues);
+        }
+        doGet(request, response);
+
     }
 
     /**

@@ -73,26 +73,24 @@ public class CreateCVMentor extends HttpServlet {
     throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account a = (Account) session.getAttribute("account");
-        if (a == null) {
-            processRequest(request, response);
-        } else {
+             String idMen = request.getParameter("idMentor");
+        int idMentor = Integer.parseInt(idMen);
 
             MentorDAO dao = new MentorDAO();
-            Mentor list = dao.getIDMentor(a.getId());
+            Mentor list = dao.getIDMentor(idMentor);
             request.setAttribute("mentor", list);
             System.out.println(list);
-            List<Have_SKill> hskill = dao.getidhaveskill(a.getId());
+            List<Have_SKill> hskill = dao.getidhaveskill(idMentor);
             System.out.println(hskill);
             request.setAttribute("cf", hskill);
 
-            Account account = dao.getAccountByid(a.getId());
+            Account account = dao.getAccountByid(idMentor);
             request.setAttribute("cx", account);
             List<SkillMentor> skill = dao.getAllskill();
             request.setAttribute("skill", skill);
             System.out.println(skill);
 
             request.getRequestDispatcher("Mentor/CreateCV.jsp").forward(request, response);
-        }
     } 
 
     /** 
@@ -107,9 +105,10 @@ public class CreateCVMentor extends HttpServlet {
     throws ServletException, IOException {
        HttpSession session = request.getSession();
         Account a = (Account) session.getAttribute("account");
-
+        String idMen = request.getParameter("idMentor");
+        int idMentor = Integer.parseInt(idMen);
         MentorDAO dao = new MentorDAO();
-        Mentor mentor = dao.getIDMentor(a.getId());
+        Mentor mentor = dao.getIDMentor(idMentor);
 
         String fileName = mentor.getAvatar(); // Default to existing avatar
 
@@ -118,7 +117,7 @@ public class CreateCVMentor extends HttpServlet {
             fileName = handleFileUpload(filePart);
         }
 
-        int idMentor = a.getId();
+        
         String fullname = request.getParameter("uname");
         String phone = request.getParameter("phone");
         String dob = request.getParameter("date");
@@ -160,7 +159,9 @@ public class CreateCVMentor extends HttpServlet {
 
         request.setAttribute("mess", "Update successfully!");
 
-        response.sendRedirect("profilecv");
+        response.sendRedirect("profilecv?idMentor="+ a.getId());
+
+        
 
         
 

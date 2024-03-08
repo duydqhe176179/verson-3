@@ -11,20 +11,27 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <style>
+            .header-area{
+                height: 45px;
+                display: flex; /* Sử dụng flexbox */
+                align-items: center; /* Canh các phần tử theo chiều dọc */
+            }
+        </style>
     </head>
     <body>
-        <!-- ***** Preloader Start ***** -->
-        <div id="js-preloader" class="js-preloader">
-            <div class="preloader-inner">
-                <span class="dot"></span>
-                <div class="dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </div>
-        <!-- ***** Preloader End ***** -->
+<!--         ***** Preloader Start ***** 
+-->                <div id="js-preloader" class="js-preloader">
+                    <div class="preloader-inner">
+                        <span class="dot"></span>
+                        <div class="dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                </div><!--
+         ***** Preloader End ***** -->
 
         <!-- ***** Header Area Start ***** -->
         <header class="header-area header-sticky wow slideInDown" data-wow-duration="0.75s" data-wow-delay="0s">
@@ -34,7 +41,7 @@
                         <nav class="main-nav">
                             <!-- ***** Logo Start ***** -->
                             <a href="home" class="logo">
-                                <img src="assets/images/logo.png" alt="Chain App Dev">
+                                <img src="img/logo.png" alt="Chain App Dev" style="height: 30px">
                             </a>
                             <!-- ***** Logo End ***** -->
                             <c:if test="${account eq null}">
@@ -57,6 +64,7 @@
                                             <c:if test="${account.getRole() eq 'Mentee'}">
                                                 <li class="scroll-to-section"><a  class="dropdown-item" href="profileMentee" >ProfileMentee</a></li>
                                                 <li class="scroll-to-section"><a class="dropdown-item"  href="listrequest" >List Request</a></li>
+                                                <li class="scroll-to-section"><a  class="dropdown-item" href="statisticreq">Statistic Request</a></li>
                                                 <li class="scroll-to-section"><a class="dropdown-item"  href="news" >News</a></li>
                                                 <li class="scroll-to-section"><a class="dropdown-item"  href="blog" >BLOG</a></li>
                                                 </c:if>
@@ -65,12 +73,12 @@
                                             <!--nếu là Mentor-->
                                             <c:if test="${account.getRole() eq 'Mentor'}">
                                                 <li class="scroll-to-section"><a  class="dropdown-item" href="profilecv?idMentor=${account.getId()}" >Profile</a></li>
-                                                <li class="scroll-to-section"><a  class="dropdown-item" href="statisticreq">Statistic Request</a></li>
+
                                                 <li class="scroll-to-section"><a class="dropdown-item"  href="createcv" >Create CV</a></li>
                                                 <li class="scroll-to-section"><a class="dropdown-item"  href="#" data-toggle="modal" data-target="#statisticsModal">View Statistic</a></li>
                                                 <li class="scroll-to-section"><a  class="dropdown-item" href="reqmentor" >View Request</a></li>
                                                 <li class="scroll-to-section"><a  class="dropdown-item" href="viewrequestmentee" >View invitingRequest</a></li>
-                                               <li class="scroll-to-section"><a class="dropdown-item"  href="news" >News</a></li>
+                                                <li class="scroll-to-section"><a class="dropdown-item"  href="news" >News</a></li>
                                                 <li class="scroll-to-section"><a class="dropdown-item"  href="blog" >BLOG</a></li>
                                                 </c:if>
                                             <!------------------------------- -->    

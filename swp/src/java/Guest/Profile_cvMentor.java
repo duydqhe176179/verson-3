@@ -67,34 +67,44 @@ public class Profile_cvMentor extends HttpServlet {
         HttpSession session = request.getSession();
         MentorDAO mentorDao = new MentorDAO();
         String action = request.getParameter("action");
-        int idMentor = Integer.parseInt(request.getParameter("idMentor"));
+        String idMentorParam = request.getParameter("idMentor");
+        if (idMentorParam != null && !idMentorParam.isEmpty()) {
+            try {
+                int idMentor = Integer.parseInt(idMentorParam);
+                System.out.println(idMentor);
 
-        // lấy full thông tin CV của mentor
-        Mentor mentor = mentorDao.getIDMentor(idMentor);
-        request.setAttribute("cv", mentor);
-        List<Have_SKill> hskill = mentorDao.getidhaveskill(idMentor);
-        request.setAttribute("cf", hskill);
-        info info = mentorDao.getIdinfo(idMentor);
-        request.setAttribute("cs", info);
-        Account account = mentorDao.getAccountByid(idMentor);
-        request.setAttribute("cx", account);
-        //
+                // Retrieve full CV information of the mentor
+                Mentor mentor = mentorDao.getIDMentor(idMentor);
+                request.setAttribute("cv", mentor);
 
-        if (action ==null) { // nếu đây là thao tác mentor xem CV của chính mình
-            
-            request.getRequestDispatcher("Mentor/profileMentor.jsp").forward(request, response);
-        } else if (action.equals("view")) { // nếu đây là thao tác xem CV từ phần search mentor by skill
-            request.setAttribute("action", "request");
-            request.getRequestDispatcher("Mentor/profileMentor.jsp").forward(request, response);
+                // Retrieve skills of the mentor
+                List<Have_SKill> hskill = mentorDao.getidhaveskill(idMentor);
+                request.setAttribute("cf", hskill);
+
+                // Retrieve additional info of the mentor
+                info info = mentorDao.getIdinfo(idMentor);
+                request.setAttribute("cs", info);
+
+                // Retrieve account information of the mentor
+                Account account = mentorDao.getAccountByid(idMentor);
+                request.setAttribute("cx", account);
+
+                // Forward the request to the appropriate JSP page based on the action
+                if (action == null) { // If this is the action of a mentor viewing their own CV
+                    request.getRequestDispatcher("Mentor/profileMentor.jsp").forward(request, response);
+                } else if (action.equals("view")) { // If this is the action of viewing CV from the search functionality
+                    request.setAttribute("action", "request");
+                    request.getRequestDispatcher("Mentor/profileMentor.jsp").forward(request, response);
+                }
+            } catch (NumberFormatException e) {
+                // Handle the case where the parameter is not a valid integer
+                e.printStackTrace(); // Or log the error
+            }
+        } else {
+            // Handle the case where the "idMentor" parameter is null or empty
+            System.out.println("idMentor parameter is null or empty");
+            // Optionally, you can return an error response or redirect the user to an error page
         }
-
-//        Account a = (Account) session.getAttribute("account");
-//        if (a == null) {
-//            processRequest(request, response);
-//        } else {
-//
-//
-//        }
     }
 
     /**

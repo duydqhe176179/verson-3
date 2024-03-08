@@ -64,7 +64,7 @@
         <div id="svg_wrap"></div>
 
         <h1>Update CV</h1>
-        <form id="msform" method="POST" action="createcv" enctype="multipart/form-data" style="margin-top: 30px" onsubmit="return submitForm();">
+        <form id="msform" method="POST" action="createcv?idMentor=${cx.getId()}" enctype="multipart/form-data" style="margin-top: 30px" onsubmit="return submitForm();">
             <section>
                 <div class="form-group">
                     <label class="fieldlabels" for="photo">Image:</label>
@@ -107,8 +107,9 @@
 
             <section>
                 <div class="form-group">
-                    <label class="fieldlabels">Phone: </label> 
-                    <input type="text" name="phone" placeholder="Phone" value="${mentor.phone}" required pattern="[0-9]{10}" title="Please enter a 10-digit phone number" />                                     
+                    <label class="fieldlabels">Phone:</label>
+                    <input type="text" id="phone" name="phone" placeholder="Phone" value="${mentor.phone}" />
+                    <span id="phoneError" style="color: red; display: none;">Please enter a 10-digit phone number</span>
                 </div>
                 <div class="form-group">
                     <label class="fieldlabels">Profession: </label> 
@@ -181,6 +182,18 @@
 
 
             setMaxDate();
+
+            const phoneInput = document.getElementById('phone');
+            const phoneError = document.getElementById('phoneError');
+
+            phoneInput.addEventListener('input', function () {
+                const phone = this.value.trim();
+                if (phone.length !== 10 || !/^\d+$/.test(phone)) {
+                    phoneError.style.display = 'inline';
+                } else {
+                    phoneError.style.display = 'none';
+                }
+            });
         </script>
     </body>
 </html>

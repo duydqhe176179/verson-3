@@ -40,6 +40,20 @@ public class AdminDAO extends DBContext {
         }
         return arr;
     }
+     public List<SkillMentor> getListSkillByPage(List<SkillMentor> list, int start, int end) {
+        ArrayList<SkillMentor> arr = new ArrayList<>();
+        for (int i = start; i < end; i++) {
+            arr.add(list.get(i));
+        }
+        return arr;
+    }
+      public List<News> getListNewByPage(List<News> list, int start, int end) {
+        ArrayList<News> arr = new ArrayList<>();
+        for (int i = start; i < end; i++) {
+            arr.add(list.get(i));
+        }
+        return arr;
+    }
 
     public List<Mentor> listMentorByadmin(String searchMentor) {
         List<Mentor> mentors = new ArrayList<>();

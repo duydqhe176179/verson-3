@@ -28,7 +28,6 @@
         
         TemplateMo 570 Chain App Dev
         
-        https://templatemo.com/tm-570-chain-app-dev
         
         -->
 

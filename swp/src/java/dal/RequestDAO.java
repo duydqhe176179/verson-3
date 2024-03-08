@@ -20,8 +20,8 @@ public class RequestDAO extends DBContext {
     ResultSet rs;
 
     public boolean createRequest(Request request) {
-        String query = "INSERT INTO request (idMentee, idMentor, title, content, skill, status, deadline, hour) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?,?)";
+        String query = "INSERT INTO request (idMentee, idMentor, title, content, skill, status, deadline, hour,totalCost) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?,?,?)";
 
         try ( Connection connection = this.connection;  PreparedStatement pstmt = connection.prepareStatement(query)) {
 
@@ -33,7 +33,7 @@ public class RequestDAO extends DBContext {
             pstmt.setString(6, request.getStatus());
             pstmt.setString(7, request.getDeadlineDate());
             pstmt.setBigDecimal(8, request.getDeadlineHour());
-
+            pstmt.setInt(9, request.getTotalCost());
             pstmt.executeUpdate();
         } catch (SQLException e) {
             // Handle database access or SQL exception
@@ -109,6 +109,46 @@ public class RequestDAO extends DBContext {
         return null;
     }
 
+    public List<Request> getAllRequestsManager() {
+        List<Request> list = new ArrayList<>();  // Khởi tạo một danh sách mới
+
+        String sql = "SELECT r.idRequest, r.idMentee, r.idMentor, m.fullname AS FullName, r.title, r.content, r.skill, r.status, r.startDate, r.deadline, r.hour\n"
+                + "FROM request r\n"
+                + "JOIN mentee m ON r.idMentee = m.idMentee\n";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                Request objE = new Request(
+                        rs.getInt(1), rs.getInt(2), rs.getInt(3),
+                        rs.getString(4), rs.getString(5), rs.getString(6),
+                        rs.getString(7), rs.getString(8), rs.getString(9),
+                        rs.getString(10), rs.getFloat(11)
+                );
+                list.add(objE);
+
+            }
+        } catch (SQLException e) {
+            System.out.println("Error when selecting");
+            // Xử lý ngoại lệ một cách đúng đắn, ghi log hoặc ném lại nếu cần thiết
+        } finally {
+            // Đảm bảo đóng các tài nguyên, ví dụ: PreparedStatement, ResultSet
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stm != null) {
+                    stm.close();
+                }
+            } catch (SQLException e) {
+                System.out.println("Error when closing resources");
+            }
+        }
+        return list;
+    }
+
     private Request mapResultSetToRequest(ResultSet resultSet) throws SQLException {
         return new Request(
                 resultSet.getInt("idRequest"),
@@ -119,7 +159,8 @@ public class RequestDAO extends DBContext {
                 resultSet.getString("skill"),
                 resultSet.getString("status"),
                 resultSet.getString("deadlineDate"),
-                resultSet.getBigDecimal("deadlineHour")
+                resultSet.getBigDecimal("deadlineHour"),
+                resultSet.getInt("totalCost")
         );
     }
 
@@ -150,6 +191,37 @@ public class RequestDAO extends DBContext {
         } catch (Exception e) {
             System.out.println(e);
             return false;
+        }
+        return true;
+    }
+
+    public boolean UpdateRequestStatus(String idr, String status) {
+        Connection conn = null;
+        PreparedStatement stm = null;
+        String query = "UPDATE [dbo].[request]\n"
+                + "SET \n"
+                + "[status] = ?\n"
+                + "WHERE idRequest = ?";
+        try {
+            conn = new DBContext().connection;
+            stm = conn.prepareStatement(query);
+            stm.setString(1, status);
+            stm.setString(2, idr);
+            stm.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        } finally {
+            try {
+                if (stm != null) {
+                    stm.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex);
+            }
         }
         return true;
     }

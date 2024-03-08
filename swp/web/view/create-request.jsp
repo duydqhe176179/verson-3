@@ -8,23 +8,50 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
         <title>Create Request</title>
+
+        <!-- Bootstrap core CSS -->
+        <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+        <!--
+        
+        TemplateMo 570 Chain App Dev
+        
+        https://templatemo.com/tm-570-chain-app-dev
+        
+        -->
+
+        <!-- Additional CSS Files -->
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+        <link rel="stylesheet" href="assets/css/templatemo-chain-app-dev.css">
+        <link rel="stylesheet" href="assets/css/animated.css">
+        <link rel="stylesheet" href="assets/css/owl.css">
+        <script src="https://kit.fontawesome.com/4c292f6960.js" crossorigin="anonymous"></script>
+
         <style>
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
                 background-color: #f5f5f5;
+                background-image: url('../assets/images/client-bg.png')
             }
 
-            .container {
+            .main-banner-container {
                 max-width: 600px;
-                margin: 50px auto;
+                margin: 0px auto;
                 padding: 20px;
                 background-color: #fff;
-                border-radius: 5px;
+                border-radius: 10px;
                 box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                padding-bottom: 70px
             }
 
             h2 {
@@ -105,64 +132,58 @@
             }
         </style>
     </head>
-    <body>
-        <div class="container">
-            <h2>Create Request</h2>
-            <form action="Request?action=create" method="post">
-                <label for="mentor">Mentor:</label>
-                <span>${mentor.getFullname()}</span>
+    <body style="background-image: url(../assets/images/client-bg.png)">
+        <jsp:include page="../header.jsp"></jsp:include>
+            <div class="main-banner-container">
+                <h2>Create Request</h2>
+                <form action="Request?action=create" method="post">
+                    <label for="mentor" style="font-size: 20px">Mentor:</label>
+                    <span style="font-size: 20px">${mentor.getFullname()}</span>
                 <input type="text" name="idMentor" value="${mentor.idMentor}" style="display: none">
-                
                 <br><br>
+                <div class="form-group">
+                    <label  style="font-size: 18px">Course: </label>
+                    <span style="font-size: 18px">${skillMentor.getSkillName()}</span>
+                    <input type="text" name="idSkill" value="${skillMentor.getId()}" style="display: none">
+                </div>
+                <br>
                 <label for="title">Title:</label>
                 <input type="text" id="title" name="title" required>
 
-                <label for="content">Content:</label>
+                <label for="content">Enter your Schedule: </label>
                 <textarea id="content" name="content" required></textarea>
 
-                <label for="deadlineDate">Deadline Date:</label>
-                <input type="date" id="deadlineDate" name="deadlineDate" required>
-
-                <label for="deadlineHour">Deadline Hour:</label>
-                <input type="text" id="deadlineHour" name="deadlineHour" required>
-
-                <div class="form-group">
-                    <label for="skills">Select Skills:</label><br>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="skills" value="Java">
-                        <label class="form-check-label">Java</label>
+                <div class="row">
+                    <div class="col-5">
+                        <label for="deadlineDate">Deadline Date:</label>
+                        <input type="date" id="deadlineDate" name="deadlineDate" required>
                     </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="skills" value="Python">
-                        <label class="form-check-label">Python</label>
+                    <div class="col-5">
+                        <label for="deadlineHour">Total learn hour:</label>
+                        <input type="text" id="learnHour" name="deadlineHour" required>
                     </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="skills" value="NodeJS">
-                        <label class="form-check-label">NodeJS</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="skills" value="C++">
-                        <label class="form-check-label">C++</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="skills" value="C#">
-                        <label class="form-check-label">C#</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="checkbox" name="skills" value="React">
-                        <label class="form-check-label">React</label>
+                    <div class="col-2">
+                        <label for="totalButton">click this</label>
+                        <button type="button" id="totalButton">Total</button>
                     </div>
                 </div>
-
-
+                <div>
+                    <input name="totalCost" id="total" value="" style="display: none">
+                </div>
+                <br>
+                <div>
+                    <label for="totalValue" >Total: </label>
+                    <span id="totalValue"></span>
+                </div>
+                <br><br><br>
                 <div style="display: flex; justify-content: center;">
                     <button type="submit" style="width: 48%; margin-right: 4%;">Create Request</button>
-                    <a href="home.jsp" class="btn" style="text-align: center;">Back to Homepage</a>
+                    <!--                    <a href="home.jsp" class="btn" style="text-align: center;">Back to Homepage</a>-->
                 </div>
 
 
             </form>
-            <c:if test="${param.msg != null}">
+            <c:if test="${msg != null}">
                 <div class="alert alert-success" role="alert">
                     Create successful!
                 </div>
@@ -173,6 +194,40 @@
                 </div>
             </c:if>
         </div>
+        <script>
+            // Lấy thẻ input và button
+            var learnHourInput = document.getElementById("learnHour");
+            var totalButton = document.getElementById("totalButton");
+            var totalValueInput = document.getElementById("total");
+            var totalValueSpan = document.getElementById("totalValue");
+            
+            // Thêm sự kiện click vào button "Total"
+            totalButton.addEventListener("click", function () {
+                // Lấy giá trị nhập vào từ input
+                var learnHourValue = parseFloat(learnHourInput.value);
+
+                // Kiểm tra nếu giá trị nhập vào là một số hợp lệ
+                if (!isNaN(learnHourValue)) {
+                    // Cập nhật giá trị trong input totalValue
+                    totalValueInput.value = learnHourValue*${mentor.getCost()};
+                    totalValueSpan.textContent = (learnHourValue*${mentor.getCost()})+"$";
+                } else {
+                    // Nếu giá trị không hợp lệ, thông báo cho người dùng
+                    alert("Please enter a valid number for Total learn hour.");
+                }
+            });
+        </script>
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/owl-carousel.js"></script>
+        <script src="assets/js/animation.js"></script>
+        <script src="assets/js/imagesloaded.js"></script>
+        <script src="assets/js/popup.js"></script>
+        <script src="assets/js/custom.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script> 
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     </body>
 </html>
 </html>

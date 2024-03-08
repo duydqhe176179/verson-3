@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package controller;
+package Mentor;
 
 import dal.DAO;
 import java.io.IOException;
@@ -17,10 +17,10 @@ import java.net.URLEncoder;
 
 /**
  *
- * @author trang
+ * @author hello
  */
-@WebServlet(name="Accept", urlPatterns={"/accept"})
-public class AcceptRequest extends HttpServlet {
+@WebServlet(name="EndProcess", urlPatterns={"/endProcess"})
+public class EndProcess extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -32,40 +32,14 @@ public class AcceptRequest extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Accept</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Accept at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        DAO dao = new DAO();
-        String action = request.getParameter("action");
-
-        if ("accept".equals(action)) {
+         DAO dao = new DAO();
+        
+        
             // Update the status in the database to "Accept"
             String idRequest = request.getParameter("idRequest"); // Get the ID from the request
 
             // Assuming updateRe returns a boolean indicating success
-            boolean updateSuccess = dao.updateRe(Integer.parseInt(idRequest), "Processing");
+            boolean updateSuccess = dao.updateRe(Integer.parseInt(idRequest), "Completed");
 
             if (updateSuccess) {
                 // Redirect to success page or yourOriginalPage.jsp
@@ -77,15 +51,34 @@ public class AcceptRequest extends HttpServlet {
                 response.sendRedirect("accept?message=" + URLEncoder.encode(mess, "UTF-8"));
                 return; // Return to avoid further processing
             }
-        }
-    }
+    } 
 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /** 
+     * Handles the HTTP <code>GET</code> method.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        processRequest(request, response);
+    } 
+
+    /** 
+     * Handles the HTTP <code>POST</code> method.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    throws ServletException, IOException {
         processRequest(request, response);
     }
-
 
     /** 
      * Returns a short description of the servlet.
